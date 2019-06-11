@@ -7,7 +7,7 @@ var NotesSchema = new Schema({
     type: String,
     required:true,
   },
-  nameUser: String,
+  author: String,
   postDate: {
       type:Date,
       default:Date.now

@@ -44,7 +44,7 @@ app.get("/scrape", function(req, res) {
         let news = {}
         news.title = $(elt).children("a").text()
         news.link = $(elt).children("a").attr("href");
-        news.des = $(elt).siblings("p").children("a").text();
+        news.description = $(elt).siblings("p").children("a").text();
         news.img = $(elt).parent().siblings("figure").find("img").attr("src");
         
         if(news) DataSeed.push(news);

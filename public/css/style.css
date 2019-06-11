@@ -1,0 +1,16 @@
+.news{
+    display: inline-block;
+    
+}
+.leftElt{
+    float: left;
+    width:10%;
+}
+
+.rightElt{
+    float: right;
+    width: 10%;
+}
+.centerElt{
+    width: 65%;
+}
