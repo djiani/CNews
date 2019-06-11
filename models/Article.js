@@ -2,12 +2,12 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var NewsSchema = new Schema({
+var ArticleSchema = new Schema({
   title: String,
   link: String,
   description: String,
   img: String,
-  note:[
+  notes:[
     {
       type: Schema.Types.ObjectId,
       ref: "Notes"
@@ -16,7 +16,7 @@ var NewsSchema = new Schema({
 });
 
 // This creates our model from the above schema, using mongoose's model method
-var News = mongoose.model("News", NewsSchema);
+var Article = mongoose.model("Article", ArticleSchema);
 
 // Export the Note model
-module.exports = News;
+module.exports = Article;

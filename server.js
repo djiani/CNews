@@ -39,21 +39,21 @@ app.get("/scrape", function(req, res) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     const $ = cheerio.load(response.data);
     
-    const NewsDataSeed = [];
+    const DataSeed = [];
      $(".latestScrollItems").find("h3").each((i, elt)=>{
-        let result = {}
-        result.title = $(elt).children("a").text()
-        result.link = $(elt).children("a").attr("href");
-        result.des = $(elt).siblings("p").children("a").text();
-        result.img = $(elt).parent().siblings("figure").find("img").attr("src");
+        let news = {}
+        news.title = $(elt).children("a").text()
+        news.link = $(elt).children("a").attr("href");
+        news.des = $(elt).siblings("p").children("a").text();
+        news.img = $(elt).parent().siblings("figure").find("img").attr("src");
         
-        if(result) NewsDataSeed.push(result);
+        if(news) DataSeed.push(news);
 
     })
-    if(NewsDataSeed){
-        db.News.create(NewsDataSeed)
-        .then( dbNews =>{
-            res.json(dbNews);
+    if(DataSeed){
+        db.Article.create(DataSeed)
+        .then( dbArticles =>{
+            res.json(dbArticles);
         }).catch(err =>{
             res.status(500).json({error: err.message});
         })
@@ -64,32 +64,26 @@ app.get("/scrape", function(req, res) {
   });
 });
 
-// // Route for getting all Articles from the db
-// app.get("/articles", function(req, res) {
-//   // TODO: Finish the route so it grabs all of the articles
-//   db.Article.find()
-//   .then(function(dbResults){
-//     res.json(dbResults);
-//   }).catch(function(err){
-//     res.status(500).json({error: err.message});
-//   })
-// });
+// Route for getting all articles from the db
+app.get("/articles", function(req, res) {
+  db.Article.find()
+  .then(function(dbArticles){
+    res.json(dbArticles);
+  }).catch(function(err){
+    res.status(500).json({error: err.message});
+  })
+});
 
-// // Route for grabbing a specific Article by id, populate it with it's note
-// app.get("/articles/:id", function(req, res) {
-//   // TODO
-//   // ====
-//   // Finish the route so it finds one article using the req.params.id,
-//   // and run the populate method with "note",
-//   // then responds with the article with the note included
-//   db.Article.findOne({_id: req.params.id})
-//   .populate("note")
-//   .then(function(dbResults){
-//     res.json(dbResults);
-//   }).catch(function(err){
-//     res.status(500).json({error: err.message});
-//   })
-// });
+// Route for grabbing a specific Article by id, populate it with it's note
+app.get("/articles/:id", function(req, res) {
+  db.Article.findOne({_id: req.params.id})
+  .populate("notes")
+  .then(function(dbResults){
+    res.json(dbResults);
+  }).catch(function(err){
+    res.status(500).json({error: err.message});
+  })
+});
 
 // // Route for saving/updating an Article's associated Note
 // app.post("/articles/:id", function(req, res) {
