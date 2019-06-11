@@ -7,10 +7,12 @@ var NewsSchema = new Schema({
   link: String,
   description: String,
   img: String,
-  note:{
-    type: Schema.Types.ObjectId,
-    ref: "Notes"
-  }
+  note:[
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Notes"
+    }
+  ]
 });
 
 // This creates our model from the above schema, using mongoose's model method

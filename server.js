@@ -1,20 +1,20 @@
-var express = require("express");
-var logger = require("morgan");
-var mongoose = require("mongoose");
+const express = require("express");
+const logger = require("morgan");
+const mongoose = require("mongoose");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 // Require all models
-//var db = require("./models");
+const db = require("./models");
 
-var PORT = 3000;
+const PORT = 3000;
 
 // Initialize Express
-var app = express();
+const app = express();
 
 // Configure middleware
 
@@ -23,31 +23,42 @@ app.use(logger("dev"));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 // Make public a static folder
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-//mongoose.connect("mongodb://localhost/cnewsDB", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/cnewsDB", { useNewUrlParser: true });
 
 // Routes
 
-// A GET route for scraping the echoJS website
+// A GET route for scraping the cnet website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
   axios.get("https://www.cnet.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+    const $ = cheerio.load(response.data);
     
-    const results = [];
-    const latestStories = $(".latestScrollItems").find("h3").each((i, elt)=>{
+    const NewsDataSeed = [];
+     $(".latestScrollItems").find("h3").each((i, elt)=>{
         let result = {}
         result.title = $(elt).children("a").text()
         result.link = $(elt).children("a").attr("href");
         result.des = $(elt).siblings("p").children("a").text();
         result.img = $(elt).parent().siblings("figure").find("img").attr("src");
-        results.push(result);
+        
+        if(result) NewsDataSeed.push(result);
+
     })
-    console.log(results);
+    if(NewsDataSeed){
+        db.News.create(NewsDataSeed)
+        .then( dbNews =>{
+            res.json(dbNews);
+        }).catch(err =>{
+            res.status(500).json({error: err.message});
+        })
+    }
+    
 
   
   });
