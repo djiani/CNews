@@ -11,7 +11,7 @@ const cheerio = require("cheerio");
 // Require all models
 const db = require("./models");
 
-const PORT = 3000;
+const PORT = 8080;
 
 // Initialize Express
 const app = express();
@@ -67,6 +67,7 @@ app.get("/scrape", function(req, res) {
 // Route for getting all articles from the db
 app.get("/articles", function(req, res) {
   db.Article.find()
+  .populate("notes")
   .then(function(dbArticles){
     res.json(dbArticles);
   }).catch(function(err){
@@ -84,6 +85,39 @@ app.get("/articles/:id", function(req, res) {
     res.status(500).json({error: err.message});
   })
 });
+
+app.post("/saveArticle", function(req, res){
+  console.log("req.body", req.body.saveArt);
+  //5cffd5b3beb9e90fd021559d {_id:{$in:req.body.saveArt}}
+  db.Article.find({_id:{$in:req.body.saveArt}})
+  .populate("notes")
+  .then(function(dbArticles){
+    res.json(dbArticles);
+  }).catch(function(err){
+    res.status(500).json({error: err.message});
+  })
+})
+
+
+
+app.get("/notes", function(req, res) {
+  db.Notes.find()
+  .then(function(dbNotes){
+    res.json(dbNotes);
+  }).catch(function(err){
+    res.status(500).json({error: err.message});
+  })
+});
+
+
+app.post("/notes/comments/:id", function(req, res){
+  db.Notes.create(req.body)
+  .then(function(dbNote){
+    return db.Article.findOneAndUpdate({_id:req.params.id}, { $push: { notes: dbNote._id } }, {new: true} ).populate("Notes")
+  }).then(function(dbArticle){
+        res.json(dbArticle);
+    })
+})
 
 // // Route for saving/updating an Article's associated Note
 // app.post("/articles/:id", function(req, res) {

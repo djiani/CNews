@@ -13,4 +13,13 @@
 }
 .centerElt{
     width: 65%;
+    
+}
+.centerElt h2{
+    font-size: 1.2rem;
+}
+
+.comment{
+    background-color: gray;
+    color:black;
 }

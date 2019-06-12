@@ -1,29 +1,56 @@
 let idNote;
-$(document).ready(function(){
-    $.get("/articles", function(dataArticles){
-      const DomArticle =  dataArticles.map(function(data){
-         return (`
-         <div class="card bg-primary text-white p-1 m-2">
-            <div class="card-body">
-                <div class="leftElt news">
-                    <a href=${data.link}>
-                        <img src=${data.img} class="img-thumbnail" alt="Image news">
-                    </a>
-                </div>
-                <div class="centerElt news">
-                        <h2>${data.title}</h2>
-                        <p>${data.description}</p>
-                </div>
-                <div class="rightElt news">
-                    <button type="button" class="btn btn-danger btn-block m-1 p-1 save" data-id=${data._id}> save</button>
-                    <button type="button" class="btn btn-danger btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>
-                </div>
-            </div>
-            <div class="comment"></div>
-        </div>`);
-        });
+const SaveArticle = [];
+function rendersComment(notes){
+    if(notes && notes.length !== 0){
+        return notes.map(function(elt){
+            return(`
+            <div class="">
+                <p>${elt.author}: ${elt.comment}</p>
+            </div>`)
+        })
+    }
+}
 
-        $(".listNews").html(DomArticle);
+function rendersToDom(datas, whatToDo){
+    
+    const DomArticle =  datas.map(function(data){
+        let btndata = "";
+        let commentDom = "";
+        if(whatToDo === "article"){
+            btndata = `<button type="button" class="btn btn-danger btn-block m-1 p-1 save save${data._id}" data-id=${data._id}> save</button>`;
+        }else{
+            btndata = `<button type="button" class="btn btn-danger btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>`;
+            commentDom = `<div class="comment">${rendersComment(data.notes)}</div>`;
+        }
+    
+       return (`
+       <div class="card bg-primary text-white p-1 m-2">
+          <div class="card-body">
+            <div class="leftElt news">
+            <a href=${data.link}>
+                <img src=${data.img} class="img-thumbnail" alt="Image news">
+            </a>
+            </div>
+            <div class="centerElt news">
+                <h2>${data.title}</h2>
+                <p>${data.description}</p>
+            </div>
+            <div class="rightElt news">
+                ${btndata}
+            </div>
+            ${commentDom}
+          </div>  
+      </div>`);
+      });
+
+      $(".listNews").html(DomArticle);
+}
+$(document).ready(function(){
+    //<button type="button" class="btn btn-danger btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>
+    //<div class="comment">${rendersComment(data.notes)}</div>
+    $.get("/articles", function(dataArticles){
+        
+        rendersToDom(dataArticles, "article");
     })
 
     $(".listNews").on("click", ".addNote", function(event){
@@ -35,15 +62,32 @@ $(document).ready(function(){
         event.preventDefault();
         const author = $("#username").val();
         const comment = $("#comment").val();
-        console.log(user, comment, idNote);
         const newComment = {
             author: author,
             comment: comment
         }
 
-        $.post("/notes/comments", newComment, function(response){
+        $.post("/notes/comments/"+idNote, newComment, function(response){
             console.log(response);
         } )
+    })
+
+    $(".listNews").on("click", ".save", function(event){
+        const data_id = $(this).attr("data-id");
+        SaveArticle.push(data_id);
+        $(".save"+data_id).addClass("disabled");
+        console.log("SaveArticle", SaveArticle);
+    })
+
+    $("#saveArticle").click(function(event){
+        const artObj = {
+            saveArt : SaveArticle
+        }
+       $.post('/saveArticle', artObj, function(articleSaveData){
+           console.log("display save article!!!!");
+           console.log(articleSaveData);
+           rendersToDom(articleSaveData, "saveArticle");
+       })
     })
 
 })
