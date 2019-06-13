@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./js/app.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Cnews</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a class="navbar-brand" href="/">Cnews</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                  <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#saveArticle" id="saveArticle">save Article</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/scrape" id="scrape" >Scrape New Article</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/clearArticle" id="clearArticle">Clear Article</a>
+                    </li>    
+                  </ul>
+                </div>  
+              </nav>
+              <br>
+
+
+    <div class="container">
+        <div class="main text-center">
+            <h1 class="TextHeader">Current News</h1>
+            <div class="listNews"></div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="NotesModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="usr">Name:</label>
+                            <input type="text" class="form-control" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">Comment:</label>
+                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary postComment">Post</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                   
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
