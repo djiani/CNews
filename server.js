@@ -98,6 +98,16 @@ app.post("/saveArticle", function (req, res) {
     })
 })
 
+app.get("/artile/delete/all", function(req, res){
+  db.Notes.deleteMany()
+  db.Article.deleteMany()
+    .then(function (data) {
+      console.log("data:", data);
+      res.json(data);
+    }).catch(function (err) {
+      res.json({ error: err.message });
+    })
+})
 
 
 app.get("/notes", function (req, res) {

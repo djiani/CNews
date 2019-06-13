@@ -17,7 +17,7 @@
 
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                <a class="navbar-brand" href="/">Cnews</a>
+                <a class="navbar-brand" href="/">ScrapeNews</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -27,7 +27,7 @@
                       <a class="nav-link" href="#saveArticle" id="saveArticle">save Article</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="/scrape" id="scrape" >Scrape New Article</a>
+                      <a class="nav-link" href="/scrape" id="scrape" class="scrape2" >Scrape New Article</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="/clearArticle" id="clearArticle">Clear Article</a>
@@ -41,7 +41,14 @@
     <div class="container">
         <div class="main text-center">
             <h1 class="TextHeader">Current News</h1>
-            <div class="listNews"></div>
+            <div class="listNews">
+                    <div class="card">
+                            <div class="card-body">
+                                <h3>Click below to load News </h3>
+                                <a  href="" class="btn btn-primary btn-lg loadNews" >Load News</a>
+                            </div>
+                        </div>
+            </div>
         </div>
     </div>
 
