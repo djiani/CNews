@@ -12,7 +12,7 @@
     width: 10%;
 }
 .centerElt{
-    width: 65%;
+    width: 75%;
     
 }
 .centerElt h2{
@@ -29,4 +29,18 @@
 #saveArticle:hover, #scrape:hover, #clearArticle:hover{
     background: greenyellow;
     color: antiquewhite;
+}
+
+@media only screen and (max-width:576px){
+    .centerElt h2{
+        font-size: 0.8rem;
+    }
+    .centerElt{
+        width: 90%;
+        
+    }
+    .rightElt{
+        float: none;
+        width: 100%;
+    }
 }

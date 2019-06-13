@@ -8,8 +8,8 @@ function rendersComment(notes){
             return(`
             
                 <div class="row noteElt">
-                    <div class="col-11">${elt.author}: ${elt.comment} </div>
-                    <div class="col-1 "><button class="btn btn-danger deleteNote" data-noteId= ${elt._id}> X </button></div> 
+                    <div class="col-10 col-md-11"><span class="badge badge-pill badge-primary">${elt.author}  </span> ${elt.comment} </div>
+                    <div class="col-2 col-md-1"><button class="btn btn-danger deleteNote" data-noteId= ${elt._id}> X </button></div> 
                 </div>`)
         })
     
@@ -27,7 +27,8 @@ function rendersToDom(datas, whatToDo){
         if(whatToDo === "article"){
             btndata = `<button type="button" class="btn btn-danger btn-block m-1 p-1 save save${data._id}" data-id=${data._id}> save</button>`;
         }else{
-            btndata = `<button type="button" class="btn btn-danger btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>`;
+            btndata = `<button type="button" class="btn  btn-block m-1 p-1 deleteArticle" data-id=${data._id}> Delete Article</button>
+                        <button type="button" class="btn btn-info btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>`;
             commentDom = `<div class="comment">${rendersComment(data.notes)}</div>`;
         }
     
@@ -57,7 +58,7 @@ $(document).ready(function(){
     //<button type="button" class="btn btn-danger btn-block m-1 p-1 addNote" data-id=${data._id}> add Note</button>
     //<div class="comment">${rendersComment(data.notes)}</div>
     $.get("/articles", function(dataArticles){
-        
+        $(".TextHeader").text("HeadLight News from Cnet");
         rendersToDom(dataArticles, "article");
     })
 
@@ -107,9 +108,18 @@ $(document).ready(function(){
             saveArt : SaveArticle
         }
        $.post('/saveArticle', artObj, function(articleSaveData){
-           console.log("display save article!!!!");
-           console.log(articleSaveData);
+        $(".TextHeader").text(" Saved headLight News from Cnet");
+        if(SaveArticle.length === 0){
+            $(".listNews").html(`
+            <div class="card">
+                <div class="card-body">
+                    <h3>You having save any news yet</h3>
+                    <a  href="/" class="btn btn-primary btn-lg" >Go back to Home</a>
+                </div>
+            </div>`)
+        }else{
            rendersToDom(articleSaveData, "saveArticle");
+        }
        })
     })
 
@@ -120,14 +130,26 @@ $(document).ready(function(){
         const url = "/note/delete/"+noteId;
         console.log("url", url);
         axios.get(url).then(function(){
-            const artObj = {
-                saveArt : SaveArticle
+            if(SaveArticle.length === 0){
+                $(".listNews").html(`
+                <div class="card">
+                    <div class="card-body">
+                        <h3>You have not saved any news Article yet. </h3>
+                        <p>Go back to the home page and click Save to keep the items you want backed up in your daily journal</p>
+                        <a  href="/" class="btn btn-primary btn-lg" >Go back to Home</a>
+                    </div>
+                </div>`)
+            }else{
+                const artObj = {
+                    saveArt : SaveArticle
+                }
+               $.post('/saveArticle', artObj, function(articleSaveData){
+                   console.log("display save article!!!!");
+                   console.log(articleSaveData);
+                   rendersToDom(articleSaveData, "saveArticle");
+               })
             }
-           $.post('/saveArticle', artObj, function(articleSaveData){
-               console.log("display save article!!!!");
-               console.log(articleSaveData);
-               rendersToDom(articleSaveData, "saveArticle");
-           })
+            
         })
 
 
