@@ -19,7 +19,14 @@
     font-size: 1.2rem;
 }
 
-.comment{
+.noteElt{
     background-color: gray;
-    color:black;
+    color:white;
+    margin-bottom:2px;
+}
+
+/* menu styling */
+#saveArticle:hover, #scrape:hover, #clearArticle:hover{
+    background: greenyellow;
+    color: antiquewhite;
 }

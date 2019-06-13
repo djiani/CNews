@@ -1,13 +1,21 @@
+
+
 let idNote;
 const SaveArticle = [];
 function rendersComment(notes){
     if(notes && notes.length !== 0){
-        return notes.map(function(elt){
+        const commentList=  notes.map(function(elt){
             return(`
-            <div class="">
-                <p>${elt.author}: ${elt.comment}</p>
-            </div>`)
+            
+                <div class="row noteElt">
+                    <div class="col-11">${elt.author}: ${elt.comment} </div>
+                    <div class="col-1 "><button class="btn btn-danger deleteNote" data-noteId= ${elt._id}> X </button></div> 
+                </div>`)
         })
+    
+        return commentList.join(' ');
+    }else{
+        return "";
     }
 }
 
@@ -57,7 +65,13 @@ $(document).ready(function(){
         idNote = $(this).attr("data-id")
         $("#NotesModal").modal("show");
     })
+    
 
+   $("#scrape").click(function(event){
+    $.get("/scrape", function(data){
+        window.location.href= "/";
+    })
+   })
     $(".postComment").click(function(event){
         event.preventDefault();
         const author = $("#username").val();
@@ -68,8 +82,17 @@ $(document).ready(function(){
         }
 
         $.post("/notes/comments/"+idNote, newComment, function(response){
-            console.log(response);
+            $("#NotesModal").modal("hide");
+            const artObj = {
+                saveArt : SaveArticle
+            }
+           $.post('/saveArticle', artObj, function(articleSaveData){
+               console.log("display save article!!!!");
+               console.log(articleSaveData);
+               rendersToDom(articleSaveData, "saveArticle");
+           })
         } )
+        
     })
 
     $(".listNews").on("click", ".save", function(event){
@@ -90,4 +113,23 @@ $(document).ready(function(){
        })
     })
 
+    $(".listNews").on("click", ".deleteNote", function(event){
+        const noteId = $(this).attr('data-noteId');
+        console.log(noteId);
+        
+        const url = "/note/delete/"+noteId;
+        console.log("url", url);
+        axios.get(url).then(function(){
+            const artObj = {
+                saveArt : SaveArticle
+            }
+           $.post('/saveArticle', artObj, function(articleSaveData){
+               console.log("display save article!!!!");
+               console.log(articleSaveData);
+               rendersToDom(articleSaveData, "saveArticle");
+           })
+        })
+
+
+    })
 })

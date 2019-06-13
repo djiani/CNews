@@ -119,6 +119,17 @@ app.post("/notes/comments/:id", function(req, res){
     })
 })
 
+
+app.get("/note/delete/:id", function(req, res){
+  console.log("req.params.id", req.params.id);
+  db.Notes.deleteOne({_id:req.params.id})
+  .then(function(data){
+    console.log("data:", data);
+    res.json(data);
+  }).catch(function(err){
+    res.json({error: err.message});
+  })
+})
 // // Route for saving/updating an Article's associated Note
 // app.post("/articles/:id", function(req, res) {
 //   // TODO
