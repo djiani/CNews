@@ -31,7 +31,7 @@
     color: antiquewhite;
 }
 
-@media only screen and (max-width:576px){
+@media only screen and (max-width:768px){
     .centerElt h2{
         font-size: 0.8rem;
     }

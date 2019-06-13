@@ -99,8 +99,9 @@ $(document).ready(function(){
     $(".listNews").on("click", ".save", function(event){
         const data_id = $(this).attr("data-id");
         SaveArticle.push(data_id);
-        $(".save"+data_id).addClass("disabled");
-        console.log("SaveArticle", SaveArticle);
+        // $(".save"+data_id).addClass("disabled");
+        // console.log("SaveArticle", SaveArticle);
+        $(this).parent().parent().parent().remove();
     })
 
     $("#saveArticle").click(function(event){
